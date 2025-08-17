@@ -5,11 +5,14 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/topicos")
@@ -29,10 +32,31 @@ public class TopicoController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<DatosListaTopico>>  listar(@PageableDefault(size=10,sort={"titulo"}) Pageable paginacion) {
+    public ResponseEntity<Page<DatosListaTopico>>  listar(@PageableDefault(size=10,sort={"fechaDeCreacion"},direction = Sort.Direction.ASC) Pageable paginacion) {
         var page = repository.findAllByActivoTrue(paginacion)
                 .map(DatosListaTopico::new);
         return ResponseEntity.ok(page);
+    }
+    @GetMapping("/buscar")
+    public ResponseEntity<Page<DatosListaTopico>> buscarPorCourseAndYear(
+            @RequestParam String curso,
+            @RequestParam(required = false) Integer year,
+            @PageableDefault(size=10,sort={"fechaDeCreacion"},direction = Sort.Direction.ASC) Pageable paginacion){
+
+        if (year != null){
+            //Definiendo el Rango del Año
+            LocalDateTime inicio = LocalDateTime.of(year,1,1,0,0);
+            LocalDateTime fin = LocalDateTime.of(year,12,31,23,59,59);
+
+            var page = repository.findByActivoTrueAndCursoIgnoreCaseAndFechaDeCreacionBetween(curso,inicio,fin,paginacion)
+                    .map(DatosListaTopico::new);
+            return ResponseEntity.ok(page);
+        } else{
+            var page = repository.findByActivoTrueAndCursoIgnoreCase(curso,paginacion)
+                    .map(DatosListaTopico::new);
+            return ResponseEntity.ok(page);
+        }
+
     }
 
 
