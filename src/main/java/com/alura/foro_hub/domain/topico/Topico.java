@@ -1,4 +1,4 @@
-package com.alura.foro_hub.topico;
+package com.alura.foro_hub.domain.topico;
 
 
 import jakarta.persistence.*;
@@ -21,14 +21,26 @@ public class Topico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String título;
+    private String titulo;
     private String mensaje;
+    @Column(name ="fecha_creacion")
     private LocalDateTime fechaDeCreacion;
-
+    private Boolean activo;
     @Enumerated(EnumType.STRING)
     private Status status;
 
     private String autor;
     private String curso;
 
+    public Topico( DatosRegistroTopico datos) {
+        this.id = null;
+        this.titulo = datos.titulo();
+        this.mensaje = datos.mensaje();
+        this.fechaDeCreacion = LocalDateTime.now();
+        this.activo = true;
+        this.status = Status.ABIERTO;
+        this.autor = datos.autor();
+        this.curso = datos.curso();
+
+    }
 }
