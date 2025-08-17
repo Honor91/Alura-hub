@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping
+@RequestMapping("/topicos")
 //@SecurityRequirement(name = "bearer-key")
 public class TopicoController {
 
