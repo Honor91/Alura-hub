@@ -6,14 +6,18 @@ public record DatosDetalleTopico(
         Long id,
         String titulo,
         String autor,
-        LocalDateTime fechaDeCreacion
+        Status status,
+        LocalDateTime fechaDeCreacion,
+        String curso
 ) {
     public DatosDetalleTopico(Topico topico){
         this(
                 topico.getId(),
                 topico.getTitulo(),
                 topico.getAutor(),
-                topico.getFechaDeCreacion()
+                topico.getStatus(),
+                topico.getFechaDeCreacion(),
+                topico.getCurso()
         );
     }
 }

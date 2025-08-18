@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/topicos")
@@ -58,6 +60,44 @@ public class TopicoController {
         }
 
     }
+    @PostMapping("/batch")
+    public ResponseEntity<List<DatosDetalleTopico>> registrarBloque(@RequestBody List<@Valid DatosRegistroTopico> datosList){
+        var topicos = datosList.stream()
+                .map(Topico::new)
+                .toList();
+        repository.saveAll(topicos);
+
+        var response = topicos.stream()
+                .map(DatosDetalleTopico::new)
+                .toList();
+        return ResponseEntity.ok(response);
+    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<List<DatosDetalleTopico>> buscarPoridoids(
+//            @RequestParam(required = false) List<Long> ids){
+//        if (ids==null || ids.isEmpty()){
+//            var todos = repository.findAll().stream()
+//                    .map(DatosDetalleTopico::new)
+//                    .toList();
+//            return ResponseEntity.ok(todos);
+//        }
+//        var topicos = repository.findAllById(ids).stream()
+//
+//                .map(DatosDetalleTopico::new)
+//                .toList();
+//
+//        return ResponseEntity.ok(topicos);
+//    }
+    @GetMapping("/{ids}")
+    public ResponseEntity<List<DatosDetalleTopico>> buscarPorVariosIds(
+            @PathVariable List<Long> ids){
+        var topicos = repository.findAllById(ids).stream()
+                .map(DatosDetalleTopico::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(topicos);
+    }
+
 
 
 
