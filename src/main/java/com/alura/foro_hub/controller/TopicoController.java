@@ -110,6 +110,16 @@ public class TopicoController {
 
     }
 
+    @Transactional
+    @DeleteMapping("/{id}")
+    public ResponseEntity eliminar(@PathVariable Long id){
+        var topico = repository.getReferenceById(id);
+        topico.eliminar();
+
+        return ResponseEntity.noContent().build();
+    }
+
+
 
 
 }

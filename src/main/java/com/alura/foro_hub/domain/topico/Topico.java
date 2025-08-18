@@ -63,4 +63,8 @@ public class Topico {
 
 
     }
+
+    public void eliminar() {
+        this.activo = false;
+    }
 }
