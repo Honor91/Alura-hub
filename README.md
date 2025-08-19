@@ -39,5 +39,5 @@ El objetivo es implementar un **foro de discusión** con autenticación JWT, man
 
 ### 1. Clonar repositorio
 ```bash
-git clone https://github.com/tuusuario/foro_hub.git
+git clone https://github.com/Honor91/Alura-hub.git
 cd foro_hub
